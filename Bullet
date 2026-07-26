@@ -1,0 +1,96 @@
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "Mop Shop Admin",
+    LoadingTitle = "Mop Shop",
+    LoadingSubtitle = "Admin Panel",
+    ConfigurationSaving = {
+        Enabled = false
+    }
+})
+
+--========================--
+--      COMPRAR
+--========================--
+
+local ShopTab = Window:CreateTab("🛒 Comprar", 4483362458)
+
+local Cantidad = 1
+
+ShopTab:CreateInput({
+    Name = "Cantidad",
+    PlaceholderText = "Ej: 10",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        local Num = tonumber(Text)
+        if Num and Num > 0 then
+            Cantidad = math.floor(Num)
+        end
+    end
+})
+
+ShopTab:CreateButton({
+    Name = "🛒 Comprar WormtecRegular",
+    Callback = function()
+        local args = {
+            "BUY",
+            "WormtecRegular",
+            Cantidad
+        }
+
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("MopShopEvent")
+            :FireServer(unpack(args))
+
+        Rayfield:Notify({
+            Title = "Compra",
+            Content = "Compraste "..Cantidad.." WormtecRegular.",
+            Duration = 3,
+            Image = 4483362458
+        })
+    end
+})
+
+ShopTab:CreateButton({
+    Name = "💰 Vender Todo",
+    Callback = function()
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("SellShopEvent")
+            :FireServer("SELL_ALL")
+
+        Rayfield:Notify({
+            Title = "Venta",
+            Content = "Se vendieron todos los objetos.",
+            Duration = 3,
+            Image = 4483362458
+        })
+    end
+})
+
+--========================--
+--     TELEPORTS
+--========================--
+
+local TeleportTab = Window:CreateTab("📍 Teleports", 4483362458)
+
+TeleportTab:CreateButton({
+    Name = "💰 Sell Shop",
+    Callback = function()
+        game.Players.LocalPlayer.Character:PivotTo(
+            CFrame.new(1153.2857666015625, 51.65284729003906, -580.7060546875)
+        )
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "🚲 Bike Shop (Safe Zone)",
+    Callback = function()
+        game.Players.LocalPlayer.Character:PivotTo(
+            CFrame.new(250.6380615234375, 51.118934631347656, -250.15469360351562)
+        )
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "🔫 Gun Shop (Safe Zone)",
+   
