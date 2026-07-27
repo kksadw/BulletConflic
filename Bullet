@@ -1,129 +1,348 @@
-local Players = game:GetService("Players")
-local UIS = game:GetService("UserInputService")
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local Player = Players.LocalPlayer
-local PlayerGui = Player:WaitForChild("PlayerGui")
+Ventana local = Rayfield:CreateWindow({
+   Nombre = "🔥 Bullet Conflict | Game 🔫",
+   LoadingTitle = "🔫 Conflicto De Balas 💥",
+   LoadingSubtitle = "por Jkk and Aless Dev",
+   Ahorro de configuración = {
+      Habilitado = falso,
+      FolderName = nil, -- Crea una carpeta personalizada para tu centro/juego
+      Nombre de archivo = "Example Hub"
+   },
+   Discord = {
+      Habilitado = true,
+      Invitar = "https://discord.gg/AavWAXWAF6", -- El código de invitación de Discord, no incluya discord.gg/. Por ejemplo, discord.gg/ABCD sería ABCD
+      RememberJoins = true -- Establece esto en falso para que se unan a Discord cada vez que lo carguen.
+   },
+   KeySystem = true, -- Establezca esto en true para usar nuestro sistema de claves.
+   Configuración de teclas = {
+      Título = "KeySystem |Discord ",
+      Subtítulo = "Sistema de claves",
+      Nota = "UNETE AL SERVER DE DISCORD 👇
+            https://discord.gg/AavWAXWAF6",
+      FileName = "KeyConflict", -- Se recomienda usar algo único, ya que otros scripts que utilicen Rayfield podrían sobrescribir su archivo de clave.
+      SaveKey = false, -- La clave del usuario se guardará, pero si la cambias, no podrá usar tu script.
+      GrabKeyFromSite = true, -- Si esto es verdadero, establezca la clave a continuación en el sitio RAW del que desea que Rayfield obtenga la clave.
+      Clave = {"https://pastebin.com/046zcPV8"} -- Lista de claves que el sistema aceptará; pueden ser enlaces a archivos RAW (pastebin, github, etc.) o cadenas simples ("hola","clave22")
+   }
+})
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "BulletConflictAdmin"
-gui.ResetOnSpawn = false
-gui.Parent = PlayerGui
+local MainTab = Window:CreateTab("🏠 Aimbot", nil) -- Título, Imagen
+Sección Principal local = Ficha Principal:CrearSección("Principal")
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0,300,0,250)
-frame.Position = UDim2.new(0.5,-150,0.5,-125)
-frame.BackgroundColor3 = Color3.fromRGB(35,35,35)
-frame.Parent = gui
+Rayfield:Notificar({
+   Título = "Ejecutaste el script",
+   Contenido = "Gracias Por Usar Nuestros Script",
+   Duración = 2.5,
+   Imagen = nil,
+   Acciones = { -- Botones de notificación
+      Ignorar = {
+         Nombre = "¡Yaiii!",
+         Función de devolución de llamada = función()
+         print("¡El usuario pulsó Aceptar!")
+      fin
+   },
+},
+})
 
-Instance.new("UICorner",frame).CornerRadius = UDim.new(0,15)
 
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(0,170,255)
-stroke.Thickness = 2
-stroke.Parent = frame
+Entrada local = PestañaPrincipal:CrearEntrada({
+   Nombre = "Velocidad al caminar",
+   Texto del marcador de posición = "1-500",
+   RemoveTextAfterFocusLost = verdadero,
+   Función de devolución de llamada = función(Texto)
+        juego.Jugadores.JugadorLocal.Personaje.Humanoide.VelocidadDeCaminata = (Texto)
+   fin,
+})
 
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1,0,0,45)
-title.BackgroundTransparency = 1
-title.Font = Enum.Font.GothamBold
-title.Text = "🎣 BulletConflict"
-title.TextScaled = true
-title.TextColor3 = Color3.new(1,1,1)
-title.Parent = frame
+local ESPSection = MainTab:CreateSection("ESP")
 
-local function CrearBoton(nombre,color,posY)
-local b = Instance.new("TextButton")
-b.Size = UDim2.new(.88,0,0,45)
-b.Position = UDim2.new(.06,0,0,posY)
-b.BackgroundColor3 = color
-b.Font = Enum.Font.GothamBold
-b.TextColor3 = Color3.new(1,1,1)
-b.TextScaled = true
-b.Text = nombre
-Instance.new("UICorner",b).CornerRadius = UDim.new(0,12)
-b.Parent = frame
-return b
-end
+local Toggle = MainTab:CreateToggle({
+   Nombre = "Activar ESP",
+   ValorActual = falso,
+   Bandera = "ESP", -- Una bandera es el identificador del archivo de configuración; asegúrese de que cada elemento tenga una bandera diferente si está utilizando el guardado de la configuración para evitar superposiciones.
+   Función de devolución de llamada = función(Valor)
+        print("AGRICULTURA")
+   fin,
+})
 
-local empezar = CrearBoton("🟢 Empezar",Color3.fromRGB(0,170,80),60)
-local terminar = CrearBoton("🔴 Terminar",Color3.fromRGB(210,50,50),115)
-local cebos = CrearBoton("🪱 Comprar Cebos",Color3.fromRGB(0,120,255),170)
+local ESPSection = MainTab:CreateSection("ESP")
 
-empezar.MouseButton1Click:Connect(function()local args = {
-"StartFishing"
+local Toggle = MainTab:CreateToggle({
+    Name = "Inventory Viewer",
+    CurrentValue = false,
+    Flag = "InventoryViewer",
+
+    Callback = function(Value)
+        if Value then
+            --// services
+local ts = game:GetService("TweenService")
+local rs = game:GetService("RunService")
+local uis = game:GetService("UserInputService")
+local players = game:GetService("Players")
+
+--// config
+local lp = players.LocalPlayer
+if not lp then return end
+
+local CONFIG = {
+	distance = 16,
+	scrollSpeed = 20,
+	animTime = 0.3,
+	platforms = {
+		PC = {"rbxassetid://10688463768", Color3.fromRGB(80, 140, 220)},
+		Mobile = {"rbxassetid://10688464303", Color3.fromRGB(80, 220, 120)},
+		Console = {"rbxassetid://10688463319", Color3.fromRGB(220, 80, 80)},
+		Unknown = {"", Color3.fromRGB(150, 150, 150)}
+	}
 }
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("FishingRE"):FireServer(unpack(args))
-end)
 
-terminar.MouseButton1Click:Connect(function()local args = {
-"Success"
+--// 'secret' state management
+_G.BillboardState = {
+	enabled = true,
+	uis = {}, -- { [Player]: { gui, root, main, currentState, tweens } }
+	activeScroller = nil
 }
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("QTERE"):FireServer(unpack(args))
-end)
 
-cebos.MouseButton1Click:Connect(function()
-print("Comprar Cebos")
-end)
-
-local minimizado = false
-
-local minimizar = Instance.new("TextButton")
-minimizar.Size = UDim2.new(0,30,0,30)
-minimizar.Position = UDim2.new(1,-35,0,8)
-minimizar.BackgroundColor3 = Color3.fromRGB(60,60,60)
-minimizar.Text = "➖"
-minimizar.TextColor3 = Color3.new(1,1,1)
-minimizar.Font = Enum.Font.GothamBold
-minimizar.TextScaled = true
-minimizar.Parent = frame
-
-Instance.new("UICorner", minimizar).CornerRadius = UDim.new(0,8)
-
-minimizar.MouseButton1Click:Connect(function()
-minimizado = not minimizado
-
-empezar.Visible = not minimizado  
-terminar.Visible = not minimizado  
-cebos.Visible = not minimizado  
-
-if minimizado then  
-	frame.Size = UDim2.new(0,300,0,55)  
-	minimizar.Text = "➕"  
-else  
-	frame.Size = UDim2.new(0,300,0,250)  
-	minimizar.Text = "➖"  
+--// functions
+local function getPlayerPlatform(player)
+	local platform = "Unknown"
+	if player.GameplayPaused then platform = "Mobile" end
+	if uis:GetPlatform() == Enum.Platform.Windows and player == lp then platform = "PC" end
+	return platform
 end
 
+local function animate(state, direction)
+	if state.tweens then
+		for _, t in ipairs(state.tweens) do t:Cancel() end
+	end
+	state.tweens = {}
+
+	local transparencyGoal, sizeGoal
+	if direction == "in" then
+		transparencyGoal, sizeGoal = 0.2, UDim2.fromScale(1, 1)
+	else
+		transparencyGoal, sizeGoal = 1, UDim2.fromScale(0.8, 0.8)
+	end
+	
+	local transparencyTween = ts:Create(state.main, TweenInfo.new(CONFIG.animTime, Enum.EasingStyle.Quint), {BackgroundTransparency = transparencyGoal})
+	local sizeTween = ts:Create(state.root, TweenInfo.new(CONFIG.animTime, Enum.EasingStyle.Quint), {Size = sizeGoal})
+
+	table.insert(state.tweens, transparencyTween)
+	table.insert(state.tweens, sizeTween)
+	
+	transparencyTween:Play()
+	sizeTween:Play()
+	
+	return sizeTween
+end
+
+local function createElements(player)
+	local state = { currentState = "hidden", tweens = {} }
+	
+	state.gui = Instance.new("BillboardGui")
+	state.gui.Name, state.gui.AlwaysOnTop = "PlayerInfo", true
+	state.gui.Size, state.gui.StudsOffset = UDim2.fromOffset(200, 80), Vector3.new(0, 2.2, 0)
+
+	state.root = Instance.new("Frame", state.gui)
+	state.root.Name, state.root.BackgroundTransparency = "Root", 1
+	state.root.ClipsDescendants, state.root.AnchorPoint = true, Vector2.new(0.5, 0.5)
+	state.root.Position, state.root.Size = UDim2.fromScale(0.5, 0.5), UDim2.fromScale(0.8, 0.8)
+
+	state.main = Instance.new("Frame", state.root)
+	state.main.Name, state.main.Size = "Main", UDim2.fromScale(1, 1)
+	state.main.BackgroundColor3 = Color3.fromRGB(30, 32, 38)
+	state.main.Active, state.main.BackgroundTransparency = true, 1
+	Instance.new("UICorner", state.main).CornerRadius = UDim.new(0, 6)
+	Instance.new("UIStroke", state.main).Color = Color3.fromRGB(10, 11, 13)
+
+	local platformIcon = Instance.new("ImageLabel", state.main)
+	platformIcon.Name, platformIcon.Size = "PlatformIcon", UDim2.fromOffset(14, 14)
+	platformIcon.Position, platformIcon.BackgroundTransparency = UDim2.new(0, 4, 0, 4), 1
+
+	local healthBar = Instance.new("Frame", state.main)
+	healthBar.Name = "HealthBar"
+	-- FIX: Positioned at the top center
+	healthBar.Size = UDim2.new(0.8, 0, 0, 8)
+	healthBar.Position = UDim2.new(0.5, 0, 0, 4)
+	healthBar.AnchorPoint = Vector2.new(0.5, 0)
+	healthBar.BackgroundColor3 = Color3.fromRGB(10, 11, 13)
+	Instance.new("UICorner", healthBar).CornerRadius = UDim.new(1, 0)
+	
+	local healthFill = Instance.new("Frame", healthBar)
+	healthFill.Name, healthFill.Size = "Fill", UDim2.fromScale(1, 1)
+	healthFill.BackgroundColor3 = Color3.fromRGB(80, 220, 120)
+	Instance.new("UICorner", healthFill).CornerRadius = UDim.new(1, 0)
+	
+	local scroller = Instance.new("ScrollingFrame", state.main)
+	scroller.Name = "Backpack"
+	-- FIX: Adjusted to fit below the new healthbar position
+	scroller.Size = UDim2.new(1, -10, 1, -18)
+	scroller.Position = UDim2.new(0.5, 0, 1, -4)
+	scroller.AnchorPoint = Vector2.new(0.5, 1)
+	scroller.BackgroundTransparency, scroller.BorderSizePixel = 1, 0
+	scroller.ScrollBarThickness, scroller.AutomaticCanvasSize = 4, Enum.AutomaticSize.Y
+	scroller.MouseEnter:Connect(function() _G.BillboardState.activeScroller = scroller end)
+	scroller.MouseLeave:Connect(function() _G.BillboardState.activeScroller = nil end)
+
+	local grid = Instance.new("UIGridLayout", scroller)
+	grid.CellSize, grid.CellPadding = UDim2.fromOffset(28, 28), UDim2.fromOffset(4, 4)
+	grid.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	
+	local tooltip = Instance.new("TextLabel", scroller)
+	tooltip.Name, tooltip.Size = "Tooltip", UDim2.new(1, 0, 0, 20)
+	tooltip.Position, tooltip.BackgroundColor3 = UDim2.new(0, 0, 1, 22), Color3.fromRGB(10, 11, 13)
+	tooltip.Font, tooltip.TextColor3, tooltip.TextSize = Enum.Font.SourceSans, Color3.new(1, 1, 1), 14
+	tooltip.Visible = false
+	Instance.new("UICorner", tooltip).CornerRadius = UDim.new(0, 4)
+	
+	_G.BillboardState.uis[player] = state
+	return state
+end
+
+local function updateUI(player, char)
+	if not _G.BillboardState.enabled then return end
+	local state = _G.BillboardState.uis[player]
+	if not (state and state.gui) then return end
+	
+	local hum = char:FindFirstChildOfClass("Humanoid")
+	if hum then
+		local health = math.clamp(hum.Health / hum.MaxHealth, 0, 1)
+		local fill = state.main.HealthBar.Fill
+		fill.Size = UDim2.fromScale(health, 1)
+		fill.BackgroundColor3 = Color3.fromHSV(0.33 * health, 0.7, 0.8)
+	end
+	
+	local pData = CONFIG.platforms[getPlayerPlatform(player)]
+	local pIcon = state.main.PlatformIcon
+	pIcon.Image, pIcon.ImageColor3 = pData[1], pData[2]
+
+	local scroller = state.main.Backpack
+	local tooltip = scroller.Tooltip
+	for _, child in scroller:GetChildren() do
+		if child:IsA("ImageButton") then child:Destroy() end
+	end
+	
+	for _, tool in player.Backpack:GetChildren() do
+		if tool:IsA("Tool") then
+			local icon = Instance.new("ImageButton", scroller)
+			icon.Size, icon.BackgroundTransparency, icon.Image = UDim2.fromScale(1, 1), 1, tool.TextureId
+			icon.MouseEnter:Connect(function() tooltip.Text, tooltip.Visible, tooltip.Parent = tool.Name, true, icon end)
+			icon.MouseLeave:Connect(function() tooltip.Visible, tooltip.Parent = false, scroller end)
+			icon.MouseButton1Click:Connect(function() tool:Clone().Parent = lp.Backpack end)
+		end
+	end
+end
+
+--// main loop
+rs.Heartbeat:Connect(function()
+	if not _G.BillboardState.enabled then return end
+	local localChar = lp.Character
+	if not (localChar and localChar.PrimaryPart) then return end
+	local localPos = localChar.PrimaryPart.Position
+	
+	for _, player in players:GetPlayers() do
+		if player == lp then continue end
+		
+		local state = _G.BillboardState.uis[player] or createElements(player)
+		local char = player.Character
+
+		if char and char.PrimaryPart and char:FindFirstChild("Head") then
+			local dist = (localPos - char.PrimaryPart.Position).Magnitude
+			
+			if dist <= CONFIG.distance and state.currentState == "hidden" then
+				state.currentState = "visible"
+				state.gui.Adornee = char.Head
+				state.gui.Parent = char.Head
+				animate(state, "in")
+			elseif dist > CONFIG.distance and state.currentState == "visible" then
+				state.currentState = "hidden"
+				local tween = animate(state, "out")
+				tween.Completed:Wait()
+				if state.currentState == "hidden" then state.gui.Parent = nil end
+			end
+
+			if state.currentState == "visible" then updateUI(player, char) end
+		elseif state.currentState == "visible" then
+			state.currentState = "hidden"
+			state.gui.Parent = nil
+		end
+	end
 end)
 
-local dragging = false
-local dragStart
-local startPos
-
-frame.InputBegan:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseButton1
-or input.UserInputType == Enum.UserInputType.Touch then
-dragging = true
-dragStart = input.Position
-startPos = frame.Position
-end
+--// controller & cleanup
+uis.InputChanged:Connect(function(input)
+	if not _G.BillboardState.enabled or not _G.BillboardState.activeScroller then return end
+	if input.UserInputType == Enum.UserInputType.Gamepad1 and input.KeyCode == Enum.KeyCode.Gamepad1_Thumbstick2 then
+		local scroller = _G.BillboardState.activeScroller
+		scroller.CanvasPosition -= Vector2.new(0, input.Position.Y * CONFIG.scrollSpeed)
+	end
 end)
 
-UIS.InputChanged:Connect(function(input)
-if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-local delta = input.Position - dragStart
-frame.Position = UDim2.new(
-startPos.X.Scale,
-startPos.X.Offset + delta.X,
-startPos.Y.Scale,
-startPos.Y.Offset + delta.Y
-)
-end
+players.PlayerRemoving:Connect(function(player)
+	if _G.BillboardState.uis[player] then
+		_G.BillboardState.uis[player].gui:Destroy()
+		_G.BillboardState.uis[player] = nil
+	end
 end)
 
-UIS.InputEnded:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseButton1
-or input.UserInputType == Enum.UserInputType.Touch then
-dragging = false
-end
+lp.Chatted:Connect(function(msg)
+	if msg == "#FreeSchlep" and _G.BillboardState.enabled then
+		_G.BillboardState.enabled = false
+		for _, state in pairs(_G.BillboardState.uis) do state.gui:Destroy() end
+		_G.BillboardState.uis = {}
+	end
+end) e" then updateUI(player, char) end
+		elseif state.currentState == "visible" then
+			state.currentState = "hidden"
+			state.gui.Parent = nil
+		end
+	end
+end)
+
+--// controller & cleanup
+uis.InputChanged:Connect(function(input)
+	if not _G.BillboardState.enabled or not _G.BillboardState.activeScroller then return end
+	if input.UserInputType == Enum.UserInputType.Gamepad1 and input.KeyCode == Enum.KeyCode.Gamepad1_Thumbstick2 then
+		local scroller = _G.BillboardState.activeScroller
+		scroller.CanvasPosition -= Vector2.new(0, input.Position.Y * CONFIG.scrollSpeed)
+	end
+end)
+
+players.PlayerRemoving:Connect(function(player)
+	if _G.BillboardState.uis[player] then
+		_G.BillboardState.uis[player].gui:Destroy()
+		_G.BillboardState.uis[player] = nil
+	end
+end)
+
+lp.Chatted:Connect(function(msg)
+	if msg == "#FreeSchlep" and _G.BillboardState.enabled then
+		_G.BillboardState.enabled = false
+		for _, state in pairs(_G.BillboardState.uis) do state.gui:Destroy() end
+		_G.BillboardState.uis = {}
+	end
+end)
+        else
+            if _G.BillboardState then
+                _G.BillboardState.enabled = false
+                for _, state in pairs(_G.BillboardState.uis) do
+                    if state.gui then
+                        state.gui:Destroy()
+                    end
+                end
+                _G.BillboardState.uis = {}
+            end
+        end
+    end,
+})
+
+
+local TeleportTab = Window:CreateTab("📍 Teletransportes", 4483362458)
+
+local function Teleport(x, y, z)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    character:PivotTo(CFrame.new(x, y, z))
 end
