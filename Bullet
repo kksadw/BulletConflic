@@ -1,96 +1,129 @@
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
 
-local Window = Rayfield:CreateWindow({
-    Name = "Mop Shop Admin",
-    LoadingTitle = "Mop Shop",
-    LoadingSubtitle = "Admin Panel",
-    ConfigurationSaving = {
-        Enabled = false
-    }
-})
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
 
---========================--
---      COMPRAR
---========================--
+local gui = Instance.new("ScreenGui")
+gui.Name = "BulletConflictAdmin"
+gui.ResetOnSpawn = false
+gui.Parent = PlayerGui
 
-local ShopTab = Window:CreateTab("🛒 Comprar", 4483362458)
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0,300,0,250)
+frame.Position = UDim2.new(0.5,-150,0.5,-125)
+frame.BackgroundColor3 = Color3.fromRGB(35,35,35)
+frame.Parent = gui
 
-local Cantidad = 1
+Instance.new("UICorner",frame).CornerRadius = UDim.new(0,15)
 
-ShopTab:CreateInput({
-    Name = "Cantidad",
-    PlaceholderText = "Ej: 10",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        local Num = tonumber(Text)
-        if Num and Num > 0 then
-            Cantidad = math.floor(Num)
-        end
-    end
-})
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(0,170,255)
+stroke.Thickness = 2
+stroke.Parent = frame
 
-ShopTab:CreateButton({
-    Name = "🛒 Comprar WormtecRegular",
-    Callback = function()
-        local args = {
-            "BUY",
-            "WormtecRegular",
-            Cantidad
-        }
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1,0,0,45)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.Text = "🎣 BulletConflict"
+title.TextScaled = true
+title.TextColor3 = Color3.new(1,1,1)
+title.Parent = frame
 
-        game:GetService("ReplicatedStorage")
-            :WaitForChild("MopShopEvent")
-            :FireServer(unpack(args))
+local function CrearBoton(nombre,color,posY)
+local b = Instance.new("TextButton")
+b.Size = UDim2.new(.88,0,0,45)
+b.Position = UDim2.new(.06,0,0,posY)
+b.BackgroundColor3 = color
+b.Font = Enum.Font.GothamBold
+b.TextColor3 = Color3.new(1,1,1)
+b.TextScaled = true
+b.Text = nombre
+Instance.new("UICorner",b).CornerRadius = UDim.new(0,12)
+b.Parent = frame
+return b
+end
 
-        Rayfield:Notify({
-            Title = "Compra",
-            Content = "Compraste "..Cantidad.." WormtecRegular.",
-            Duration = 3,
-            Image = 4483362458
-        })
-    end
-})
+local empezar = CrearBoton("🟢 Empezar",Color3.fromRGB(0,170,80),60)
+local terminar = CrearBoton("🔴 Terminar",Color3.fromRGB(210,50,50),115)
+local cebos = CrearBoton("🪱 Comprar Cebos",Color3.fromRGB(0,120,255),170)
 
-ShopTab:CreateButton({
-    Name = "💰 Vender Todo",
-    Callback = function()
-        game:GetService("ReplicatedStorage")
-            :WaitForChild("SellShopEvent")
-            :FireServer("SELL_ALL")
+empezar.MouseButton1Click:Connect(function()local args = {
+"StartFishing"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("FishingRE"):FireServer(unpack(args))
+end)
 
-        Rayfield:Notify({
-            Title = "Venta",
-            Content = "Se vendieron todos los objetos.",
-            Duration = 3,
-            Image = 4483362458
-        })
-    end
-})
+terminar.MouseButton1Click:Connect(function()local args = {
+"Success"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("QTERE"):FireServer(unpack(args))
+end)
 
---========================--
---     TELEPORTS
---========================--
+cebos.MouseButton1Click:Connect(function()
+print("Comprar Cebos")
+end)
 
-local TeleportTab = Window:CreateTab("📍 Teleports", 4483362458)
+local minimizado = false
 
-TeleportTab:CreateButton({
-    Name = "💰 Sell Shop",
-    Callback = function()
-        game.Players.LocalPlayer.Character:PivotTo(
-            CFrame.new(1153.2857666015625, 51.65284729003906, -580.7060546875)
-        )
-    end
-})
+local minimizar = Instance.new("TextButton")
+minimizar.Size = UDim2.new(0,30,0,30)
+minimizar.Position = UDim2.new(1,-35,0,8)
+minimizar.BackgroundColor3 = Color3.fromRGB(60,60,60)
+minimizar.Text = "➖"
+minimizar.TextColor3 = Color3.new(1,1,1)
+minimizar.Font = Enum.Font.GothamBold
+minimizar.TextScaled = true
+minimizar.Parent = frame
 
-TeleportTab:CreateButton({
-    Name = "🚲 Bike Shop (Safe Zone)",
-    Callback = function()
-        game.Players.LocalPlayer.Character:PivotTo(
-            CFrame.new(250.6380615234375, 51.118934631347656, -250.15469360351562)
-        )
-    end
-})
+Instance.new("UICorner", minimizar).CornerRadius = UDim.new(0,8)
 
-TeleportTab:CreateButton({
-    Name = "🔫 Gun Shop (Safe Zone)",
-   
+minimizar.MouseButton1Click:Connect(function()
+minimizado = not minimizado
+
+empezar.Visible = not minimizado  
+terminar.Visible = not minimizado  
+cebos.Visible = not minimizado  
+
+if minimizado then  
+	frame.Size = UDim2.new(0,300,0,55)  
+	minimizar.Text = "➕"  
+else  
+	frame.Size = UDim2.new(0,300,0,250)  
+	minimizar.Text = "➖"  
+end
+
+end)
+
+local dragging = false
+local dragStart
+local startPos
+
+frame.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1
+or input.UserInputType == Enum.UserInputType.Touch then
+dragging = true
+dragStart = input.Position
+startPos = frame.Position
+end
+end)
+
+UIS.InputChanged:Connect(function(input)
+if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+local delta = input.Position - dragStart
+frame.Position = UDim2.new(
+startPos.X.Scale,
+startPos.X.Offset + delta.X,
+startPos.Y.Scale,
+startPos.Y.Offset + delta.Y
+)
+end
+end)
+
+UIS.InputEnded:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1
+or input.UserInputType == Enum.UserInputType.Touch then
+dragging = false
+end
+end
